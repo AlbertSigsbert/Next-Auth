@@ -50,7 +50,7 @@ function RegisterForm(props) {
         password,
         passwordConfirm
       );
-      console.log(result);
+      // console.log(result);
 
       resetForm();
     } catch (err) {
