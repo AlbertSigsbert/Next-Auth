@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 
+
 async function registerUser(username, email, password, passwordConfirm) {
   const response = await fetch("/api/auth/register", {
     method: "POST",
@@ -13,22 +14,35 @@ async function registerUser(username, email, password, passwordConfirm) {
     headers: { "Content-Type": "application/json" },
   });
 
-  if (!response.ok) {
-    throw new Error(response.message || "Something went wrong");
-  }
+
   const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || "Something went wrong");
+  }
 
   return data;
 }
+
+
 function RegisterForm(props) {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [error, setError] = useState(null);
+
+  const resetForm = () => {
+    setEmail("");
+    setUsername("");
+    setPassword("");
+    setPasswordConfirm("");
+    setError(null);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(username, email, password, passwordConfirm);
+  
     try {
       const result = await registerUser(
         username,
@@ -37,9 +51,12 @@ function RegisterForm(props) {
         passwordConfirm
       );
       console.log(result);
-    } catch (error) {
-      console.log(error);
+
+      resetForm();
+    } catch (err) {
+      setError(err.message);
     }
+
   };
 
   return (
@@ -140,7 +157,7 @@ function RegisterForm(props) {
             </form>
           </div>
         </div>
-        {/* {error && (
+        {error && (
             <div
               className="p-4 my-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800"
               role="alert"
@@ -148,7 +165,7 @@ function RegisterForm(props) {
               <span className="font-medium">Error! </span>
               {error}
             </div>
-          )} */}
+          )}
       </div>
     </section>
   );

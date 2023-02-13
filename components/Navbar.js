@@ -11,7 +11,7 @@ function Navbar(props) {
           NextAuth
         </Link>
         <ul className="flex space-x-6">
-          {/* <li>
+          <li>
             <Link
               href="/register"
               className={
@@ -20,7 +20,7 @@ function Navbar(props) {
             >
               Register
             </Link>
-          </li> */}
+          </li>
           <li>
             <Link
               href="/login"
