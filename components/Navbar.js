@@ -1,8 +1,13 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 function Navbar(props) {
   const router = useRouter();
+
+  const { data: session, status } = useSession();
+
+  // console.log(session, status);
 
   return (
     <header className="shadow py-2">
@@ -11,40 +16,53 @@ function Navbar(props) {
           NextAuth
         </Link>
         <ul className="flex space-x-6">
-          <li>
-            <Link
-              href="/register"
-              className={
-                router.pathname == "/register" ? "font-semibold underline" : ""
-              }
-            >
-              Register
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/login"
-              className={
-                router.pathname == "/login" ? "font-semibold underline" : ""
-              }
-            >
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/profile"
-              className={
-                router.pathname == "/profile" ? "font-semibold underline" : ""
-              }
-            >
-              Profile
-            </Link>
-          </li>
+          {!session &&
+            status !==
+              "loading"(
+                <li>
+                  <Link
+                    href="/register"
+                    className={
+                      router.pathname == "/register"
+                        ? "font-semibold underline"
+                        : ""
+                    }
+                  >
+                    Register
+                  </Link>
+                </li>
+              )}
+          {!session && status !== "loading" && (
+            <li>
+              <Link
+                href="/login"
+                className={
+                  router.pathname == "/login" ? "font-semibold underline" : ""
+                }
+              >
+                Login
+              </Link>
+            </li>
+          )}
 
-          <li className="text-gray-700 text-base">
-            <button>Logout</button>
-          </li>
+          {session && (
+            <li>
+              <Link
+                href="/profile"
+                className={
+                  router.pathname == "/profile" ? "font-semibold underline" : ""
+                }
+              >
+                Profile
+              </Link>
+            </li>
+          )}
+
+          {session && (
+            <li className="text-gray-700 text-base">
+              <button>Logout</button>
+            </li>
+          )}
         </ul>
       </nav>
     </header>
