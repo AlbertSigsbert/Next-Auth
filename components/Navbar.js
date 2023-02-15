@@ -1,11 +1,15 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 function Navbar(props) {
   const router = useRouter();
 
   const { data: session, status } = useSession();
+
+  const logoutHandler = () => {
+      signOut();
+  }
 
   // console.log(session, status);
 
@@ -16,23 +20,21 @@ function Navbar(props) {
           NextAuth
         </Link>
         <ul className="flex space-x-6">
-          {!session &&
-            status !==
-              "loading"(
-                <li>
-                  <Link
-                    href="/register"
-                    className={
-                      router.pathname == "/register"
-                        ? "font-semibold underline"
-                        : ""
-                    }
-                  >
-                    Register
-                  </Link>
-                </li>
-              )}
-          {!session && status !== "loading" && (
+          {!session && (
+            <li>
+              <Link
+                href="/register"
+                className={
+                  router.pathname == "/register"
+                    ? "font-semibold underline"
+                    : ""
+                }
+              >
+                Register
+              </Link>
+            </li>
+          )}
+          {!session && (
             <li>
               <Link
                 href="/login"
@@ -60,7 +62,7 @@ function Navbar(props) {
 
           {session && (
             <li className="text-gray-700 text-base">
-              <button>Logout</button>
+              <button onClick={logoutHandler}>Logout</button>
             </li>
           )}
         </ul>
