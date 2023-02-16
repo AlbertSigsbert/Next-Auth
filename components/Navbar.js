@@ -5,14 +5,12 @@ import { useSession, signOut } from "next-auth/react";
 function Navbar(props) {
   const router = useRouter();
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   const logoutHandler = () => {
       signOut();
   }
-
-  // console.log(session, status);
-
+  
   return (
     <header className="shadow py-2">
       <nav className="mx-[6%] my-6 flex space-y-4 font-montserrat md:space-y-0 md:flex-row justify-between items-center">

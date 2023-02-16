@@ -1,9 +1,16 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+
+
 import { verifyPassword } from "../../../helpers/auth";
 import { connectToDb } from "../../../helpers/db";
 
-export default NextAuth({
+
+export const authOptions = {
+  secret: process.env.AUTH_SECRET,
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       async authorize(credentials) {
@@ -40,4 +47,6 @@ export default NextAuth({
       },
     }),
   ],
-});
+}
+
+export default NextAuth(authOptions);
