@@ -10,7 +10,6 @@ function LoginForm(props) {
   const [password, setPassword] = useState("");
   const router = useRouter();
 
-  //CLIENT SIDE ROUTE GUARDING
     const { status } = useSession();
 
     if (status === "loading") {
