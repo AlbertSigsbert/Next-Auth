@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 async function registerUser(username, email, password, passwordConfirm) {
   const response = await fetch("/api/auth/register", {
@@ -32,6 +33,21 @@ function RegisterForm(props) {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [error, setError] = useState(null);
 
+  const router = useRouter();
+
+  //CLIENT SIDE ROUTE GUARDING
+    const { status } = useSession();
+
+    if (status === "loading") {
+      return <p>Loading...</p>;
+    }
+
+      
+    if (status === "authenticated") {
+      router.replace("/");
+      return;
+    }
+
   const resetForm = () => {
     setEmail("");
     setUsername("");
@@ -50,9 +66,11 @@ function RegisterForm(props) {
         password,
         passwordConfirm
       );
-      // console.log(result);
-
+  
       resetForm();
+
+      router.replace("/profile");
+
     } catch (err) {
       setError(err.message);
     }

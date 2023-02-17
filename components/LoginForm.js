@@ -1,10 +1,27 @@
 import { useState } from "react";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+
 
 function LoginForm(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  //CLIENT SIDE ROUTE GUARDING
+    const { status } = useSession();
+
+    if (status === "loading") {
+      return <p>Loading...</p>;
+    }
+
+      
+    if (status === "authenticated") {
+      router.replace("/");
+      return;
+    }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +33,9 @@ function LoginForm(props) {
       password: password,
     });
 
-    console.log(result);
+    if (!result.error) {
+      router.replace("/profile");
+    }
   };
 
   return (
